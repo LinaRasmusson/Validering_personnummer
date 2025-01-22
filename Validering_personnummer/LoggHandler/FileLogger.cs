@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Validering_personnummer
+﻿namespace Validering_personnummer
 {
     public class FileLogger : ILogger
     {
-        private readonly string _filePath;
+        private readonly string FilePath;
 
         public FileLogger()
         {
-            _filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "validation_log.txt");
+            FilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "validation_log.txt");
             EnsureLogFileExists();
         }
         //Kollar om det finns en fil, om inte skapas en ny fil
         private void EnsureLogFileExists()
         {
-            if (!File.Exists(_filePath))
+            if (!File.Exists(FilePath))
             {
-                File.Create(_filePath).Close();
+                File.Create(FilePath).Close();
             }
         }
 
@@ -29,11 +23,11 @@ namespace Validering_personnummer
         {
             try
             {
-                File.AppendAllText(_filePath, $"{DateTime.Now}: {incorrectNumber}\n");
+                File.AppendAllText(FilePath, $"{DateTime.Now}: {incorrectNumber}\n");
             }
-            catch (Exception ex)
+            catch (Exception exeption)
             {
-                Console.WriteLine($"Fel vid loggning: {ex.Message}");
+                Console.WriteLine($"Fel vid loggning: {exeption.Message}");
             }
         }
 

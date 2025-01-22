@@ -1,34 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Validering_personnummer.ValidatorFactory
+﻿namespace Validering_personnummer.ValidatorFactory
 {
     internal class SamordningsnummerValidator : LuhnAlgoritm, IValidator
     {
-        private string _cleanedInput { get; set; }
-        public bool IsValid { get; private set; }
-
+        private readonly string CleanedInput;
         public SamordningsnummerValidator(string cleanedInput)
         {
-            _cleanedInput = cleanedInput;
+            CleanedInput = cleanedInput;
         }
-        public void Validate()
+        //kontrollerar om numret är ett korrekt samordningsnummer
+        public bool Validate()
         {
-            if (IsValidChecksum(_cleanedInput) && isValidFormat())
+            if (IsValidChecksum(CleanedInput) && IsValidFormat())
             {
-                IsValid = true;
+                return true;
             }
-            else IsValid = false;
+            else return false;
         }
 
         // Kontrollerar korrekt angivet datumformat mellan 61-91
-        private bool isValidFormat()
+        private bool IsValidFormat()
         {
             // Extrahera dagen
-            string dayPart = _cleanedInput.Substring(4, 2);
+            string dayPart = CleanedInput.Substring(4, 2);
             // Konvertera till heltal för jämförelse
             int day = int.Parse(dayPart);
 

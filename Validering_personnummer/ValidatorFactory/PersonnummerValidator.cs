@@ -1,41 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-namespace Validering_personnummer.ValidatorFactory
+﻿namespace Validering_personnummer.ValidatorFactory
 {
     internal class PersonnummerValidator : LuhnAlgoritm, IValidator
     {
-        private string _cleanedInput;
-        
-        public bool IsValid { get; private set; }
-
+        private readonly string CleanedInput;
         public PersonnummerValidator(string cleanedInput)
         {
-            _cleanedInput = cleanedInput;
-            IsValid = false;
+            CleanedInput = cleanedInput;
         }
-
-        //Sätter IsValid till antingen true/false beroende på de två checkarna som görs, IsValidCheckSum finns i LuhnAlgoritm-klassen
-        public void Validate()
+        //Kontrollerar om numret är ett giltigt personnummer
+        public bool Validate()
         {
-            if (IsValidChecksum(_cleanedInput) && isValidFormat())
+            if (IsValidChecksum(CleanedInput) && IsValidFormat())
             {
-                IsValid = true;
+                return true;
             }
-            else IsValid = false;
+            else return false;
         }
 
-        //Kontrollerar att formatet åå-mm-dd stämmer och kontrollerar skottår
-        private bool isValidFormat()
+        //Kontrollerar att formatet åå-mm-dd stämmer och kontrollerar skottår etc.
+        private bool IsValidFormat()
         {
-            string datePart = _cleanedInput.Substring(0, 6);
+            //tar bara ut date-delen av numret, ååmmdd (från index 0-6)
+            string datePart = CleanedInput.Substring(0, 6);
             if (datePart.Length != 6) return false;
 
+            //Här försöker metoden tolka strängen datePart som ett datum i formatet ååmmdd
             return DateTime.TryParseExact(
                 datePart,
                 "yyMMdd",

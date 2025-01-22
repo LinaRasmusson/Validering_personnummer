@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Validering_personnummer
+﻿namespace Validering_personnummer
 {
     internal class InputCleaner
     {
-        public string _cleanedInput{ get; private set; }
-        public string _input;
+        public string CleanedInput{ get; private set; }
+        public string Input;
 
         public InputCleaner(string input) 
         {
-          _input = input;   
+          Input = input;   
         }
 
         public string Clean() {
-            string sanitizedInput = Sanitize(_input);
-            _cleanedInput = CorrectLength(sanitizedInput);
-            return _cleanedInput; }
+            string digitsOnlyInput = KeepDigitsOnly(Input);
+            CleanedInput = CorrectLength(digitsOnlyInput);
+            return CleanedInput; }
 
-        //SER TILL ATT INPUTEN BARA HAR SIFFROR
-        public string Sanitize(string inputNumber)
+        //Ser till att inputen bara har siffror
+        private string KeepDigitsOnly(string inputNumber)
         {
             var sanitized = new List<char>();
             foreach (char c in inputNumber)
@@ -32,18 +26,18 @@ namespace Validering_personnummer
                     sanitized.Add(c);
                 }
             }
-            _cleanedInput  = new string(sanitized.ToArray());
-            return _cleanedInput;
+            CleanedInput = new string(sanitized.ToArray());
+            return CleanedInput;
         }
-        //GÖR OM TILL 10 OM INPUT ÄR 12
-        public string CorrectLength(string sanitizedInput)
+        //gör om inputen till 10 siffror om den har 12
+        private string CorrectLength(string digitsOnlyInput)
         {
-            if (sanitizedInput.Length == 12)
+            if (digitsOnlyInput.Length == 12)
             {
-                sanitizedInput = sanitizedInput.Substring(2);
-                return sanitizedInput;
+                digitsOnlyInput = digitsOnlyInput.Substring(2);
+                return digitsOnlyInput;
             }
-            else return sanitizedInput;
+            else return digitsOnlyInput;
         }
     }
 }
